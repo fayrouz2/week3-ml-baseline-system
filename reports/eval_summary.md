@@ -1,0 +1,6 @@
+- Run ID: <run_id>
+- Primary metric: <precision / recall / MAE>
+- Baseline: <value>
+- Model: <value>
+- Interpretation: “Model beats baseline by ___ (absolute)”
+- Caveats: leakage risk, class imbalance, small data, etc.

@@ -104,8 +104,6 @@ def run_train(cfg: TrainCfg, *, root: Path, run_tag: str = "clf") -> Path:
         "roc_auc": roc_auc_score(y_test, y_proba),
     }
 
-
-
     # Optional: enforce time sorting for time-based evaluation
     if cfg.time_col:
         assert cfg.time_col in df.columns, f"Missing time_col: {cfg.time_col}"
@@ -133,16 +131,13 @@ def run_train(cfg: TrainCfg, *, root: Path, run_tag: str = "clf") -> Path:
     }
     (run_dir / "env" / "env_meta.json").write_text(json.dumps(env_meta, indent=2), encoding="utf-8")
     
-    # Keep PyCaret outputs inside run_dir
-    cwd = Path.cwd()
-    os.chdir(run_dir)
 
     registry_dir = root / "models" / "registry"
     registry_dir.mkdir(parents=True, exist_ok=True)
 
     
     metrics_file = run_dir / "metrics" / "baseline_holdout.json"
-    metrics_file.write_text(json.dumps(metrics, indent=2))
+    metrics_file.write_text(json.dumps(metrics, indent=2),encoding="utf-8")
 
 
     latest_file = registry_dir / "latest.txt"
@@ -154,7 +149,37 @@ def run_train(cfg: TrainCfg, *, root: Path, run_tag: str = "clf") -> Path:
         encoding="utf-8"
     )
 
+    run_meta = {
+    "split_strategy": "random holdout",
+    "test_size": 0.2,
+    "random_seed": cfg.session_id,
+    "primary_metric": "roc_auc"  # pick the metric you optimize
+    }
+
+    meta_file = run_dir / "run_meta.json"
+    meta_file.write_text(json.dumps(run_meta, indent=2), encoding="utf-8")
+
+
+    tables_dir = run_dir / "tables"
+    tables_dir.mkdir(parents=True, exist_ok=True)
+
+    holdout_input_file = tables_dir / "holdout_input.csv"
+    X_test.assign(**{cfg.target: y_test}).to_csv(holdout_input_file, index=False)
+
+    holdout_pred_file = tables_dir / "holdout_predictions.csv"
+    pd.DataFrame({
+    "id": X_test.index,  # or X_test[cfg.id_cols[0]] if you have an ID column
+    "y_true": y_test,
+    "y_pred": y_pred,
+    "y_proba": y_proba
+    }).to_csv(holdout_pred_file, index=False)
+
+
     log.info("Updated latest model path: %s", latest_file)
+
+    # # Keep PyCaret outputs inside run_dir
+    # cwd = Path.cwd()
+    # os.chdir(run_dir)
 
 
 
