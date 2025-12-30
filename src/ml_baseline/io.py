@@ -4,9 +4,8 @@ def write_tabular(df, path):
 
 def parquet_supported(df, path):
     try:
-            # Attempt to write to a temporary or the target path
-            df.to_parquet(path)
-            return True
+        df.to_parquet(path/"features.parquet")
+        return True
     except Exception:
-            return False
+        return False
 

@@ -1,0 +1,4 @@
+{
+  "model": "C:\\Users\\Farah FH\\bootcamp\\week3-ml-baseline-system\\models\\runs\\2025-12-30T21-38-14Z_clf_session42\\model\\model.joblib",
+  "metrics": "C:\\Users\\Farah FH\\bootcamp\\week3-ml-baseline-system\\models\\runs\\2025-12-30T21-38-14Z_clf_session42\\metrics\\baseline_holdout.json"
+}

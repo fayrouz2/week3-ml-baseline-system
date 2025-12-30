@@ -7,9 +7,9 @@
 
  ## Data (contract)
  - Feature table: data/processed/features.<csv|parquet>
- - Unit of analysis: <one row per --.>
+ - Unit of analysis: <one row per user.>
  - Target column: <name>, positive class: <--.> (if binary)
- - Optional IDs (passthrough): <list>
+ - Optional IDs (passthrough): <user_id>
 
  ## splits (draft for now)
  - Holdout strategy: random stratified (default) / time / group
