@@ -3,4 +3,4 @@
 data/processed/*
 outputs/
 models/runs/*
-cars/
+logs.log 
